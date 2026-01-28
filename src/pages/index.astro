@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StickyHeader from '../components/StickyHeader.astro';
+import Hero from '../components/Hero.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import ValuePropsSection from '../components/ValuePropsSection.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+import MusicSection from '../components/MusicSection.astro';
+import VideoGrid from '../components/VideoGrid.astro';
+import InstagramFeed from '../components/InstagramFeed.astro';
+import ContactSection from '../components/ContactSection.astro';
+
+// Vaihda tämä Behold.so API URL:ksi kun saat sen
+// Esim: "https://api.behold.so/v1/your-gallery-id/items"
+const INSTAGRAM_API_URL = import.meta.env.PUBLIC_INSTAGRAM_API_URL || '';
+---
+
+<Layout title="DJ SNABU - Professional DJ Services">
+  <StickyHeader />
+  <Hero />
+  <SocialLinks />
+  <ValuePropsSection />
+  <ServicesSection />
+  <MusicSection />
+  <VideoGrid />
+  <InstagramFeed 
+    apiUrl={INSTAGRAM_API_URL}
+    instagramUrl="https://instagram.com/djsnabu"
+    maxPosts={6}
+  />
+  <ContactSection />
+</Layout>

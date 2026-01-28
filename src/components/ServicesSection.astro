@@ -1,0 +1,68 @@
+---
+const services = [
+  {
+    title: 'Klubit & Ravintolat',
+    description: 'Energistä menoa, joka pitää tanssilattian täynnä pilkkuun asti.',
+    icon: `<svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18a3 3 0 106 0 3 3 0 00-6 0z"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 16a3 3 0 106 0 3 3 0 00-6 0z"></path>
+    </svg>`,
+  },
+  {
+    title: 'Yksityisjuhlat',
+    description: 'Häät, syntymäpäivät ja valmistujaiset räätälöidyllä musiikkivalinnalla.',
+    icon: `<svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.26a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>`,
+  },
+  {
+    title: 'Yritystapahtumat',
+    description: 'Tyylikästä taustamusiikkia tai täysi show – brändisi mukaisesti.',
+    icon: `<svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path>
+    </svg>`,
+  },
+  {
+    title: 'Tekniikka',
+    description: 'Tarvittaessa hoituu myös laadukas äänentoisto ja näyttävä valosetti.',
+    icon: `<svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 21h6"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 17h4"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a7 7 0 00-4 12.74V17h8v-1.26A7 7 0 0012 3z"></path>
+    </svg>`,
+  },
+  {
+    title: 'Valokuvaus',
+    description: 'Kysy myös valokuvauspalvelua.',
+    icon: `<svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h4l2-2h6l2 2h4v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17a4 4 0 100-8 4 4 0 000 8z"></path>
+    </svg>`,
+  },
+];
+---
+
+<section id="services" class="py-20 px-4">
+  <div class="container mx-auto max-w-7xl">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+      <span class="text-accent">Palvelut</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+      {services.map((s) => (
+        <div class="glass-effect rounded-2xl p-6 hover:scale-[1.02] transition-transform duration-300">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+              <span set:html={s.icon} />
+            </div>
+            <h3 class="text-lg font-semibold text-white">{s.title}</h3>
+          </div>
+          <p class="text-white/70 leading-relaxed">{s.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  astro-site:
+    # Vaihtoehto 1: Käytä valmista imagea (buildaa ensin: docker build -t djsnabu-web .)
+    image: djsnabu-web:latest
+    container_name: djsnabu_web
+    restart: unless-stopped
+    networks:
+      - djsnabu-network
+    # Vaihtoehto 2: Jos haluat buildata Portainerissa, kommentoi yllä oleva 'image:' ja poista kommentti alla:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared_tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    depends_on:
+      - astro-site
+    networks:
+      - djsnabu-network
+
+networks:
+  djsnabu-network:
+    driver: bridge

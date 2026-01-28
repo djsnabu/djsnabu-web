@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import djHero from '../assets/dj-hero.jpg';
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
+  <!-- DJ background image (replace src/assets/dj-hero.png with your photo) -->
+  <div class="absolute inset-0 -z-20">
+    <Image
+      src={djHero}
+      alt="DJ SNABU"
+      class="h-full w-full object-cover object-center"
+      widths={[640, 960, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      format="webp"
+    />
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+  </div>
+
+  <!-- Animated gradient glow background -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-accent/10 animate-glow-pulse"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/10 rounded-full blur-3xl animate-glow-pulse" style="animation-delay: 1s;"></div>
+  </div>
+  
+  <!-- Main content -->
+  <div class="relative z-10 text-center px-4">
+    <h1 class="text-6xl md:text-8xl lg:text-9xl font-black mb-6 tracking-tight">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-accent to-white animate-glow-pulse">
+        DJ SNABU
+      </span>
+    </h1>
+    <p class="text-base md:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+      <span class="block">
+        DJ Snabu ei ole vain soittolistan pyörittäjä – hän on tunnelman luoja, joka lukee yleisöä kuin avointa
+        kirjaa. Olipa kyseessä hikinen klubi-ilta, tyylikäs yritystapahtuma tai elämäsi tärkeimmät juhlat, Snabu
+        tuo paikalle oikean energian, laadukkaan äänentoiston ja saumattomat miksaukset.
+      </span>
+      <span class="block mt-6 text-white/90 font-semibold">
+        Kuka on DJ Snabu?
+      </span>
+      <span class="block mt-3">
+        Snabu on kokenut musiikin ammattilainen – 17 vuoden kokemus – jonka intohimo rytmiin näkyy ja kuuluu jokaisella keikalla.
+        Hänen tyylinsä on yhdistelmä teknistä varmuutta ja kykyä sopeutua tilanteeseen kuin tilanteeseen. Snabun
+        takana on vuosien kokemus eri genreistä, ja hän tietää, milloin tarvitaan klassikoita ja milloin on aika
+        pudottaa tuoreimmat bängerit.
+      </span>
+    </p>
+  </div>
+  
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
+</section>

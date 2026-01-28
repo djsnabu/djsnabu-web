@@ -1,0 +1,37 @@
+---
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <nav class="backdrop-blur-md bg-black/30 border-b border-white/10">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="text-2xl font-bold text-accent hover:text-accent/80 transition-colors">
+          DJ SNABU
+        </a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/blog" class="text-white/80 hover:text-accent transition-colors">Blogi</a>
+          <a href="#services" class="text-white/80 hover:text-accent transition-colors">Palvelut</a>
+          <a href="#music" class="text-white/80 hover:text-accent transition-colors">Musiikki</a>
+          <a href="#videos" class="text-white/80 hover:text-accent transition-colors">Videot</a>
+          <a href="#gallery" class="text-white/80 hover:text-accent transition-colors">Galleria</a>
+          <a href="#contact" class="text-white/80 hover:text-accent transition-colors">Yhteystiedot</a>
+        </div>
+        <button class="md:hidden text-white" id="mobile-menu-btn" aria-label="Menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', () => {
+      // Add mobile menu functionality if needed
+    });
+  }
+</script>

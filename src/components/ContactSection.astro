@@ -1,0 +1,104 @@
+---
+interface Props {
+  email?: string;
+  phone?: string;
+  location?: string;
+  website?: string;
+}
+
+const { 
+  email = 'info@niceevents.fi',
+  phone = '0401950045',
+  location = 'Helsinki',
+  website = 'https://niceevents.fi'
+} = Astro.props;
+---
+
+<section id="contact" class="py-20 px-4">
+  <div class="container mx-auto max-w-4xl">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+      <span class="text-accent">Keikkamyynti</span>
+    </h2>
+    
+    <div class="glass-effect rounded-2xl p-8 md:p-12 shadow-2xl">
+      <div class="text-center space-y-8">
+        <div>
+          <h3 class="text-2xl font-semibold mb-4 text-white/90">Ota yhteyttä ja varaa keikka!</h3>
+          <p class="text-white/70 mb-8">
+            Älä jätä juhliesi tunnelmaa sattuman varaan. Varmista DJ Snabu paikalle ja takaa vieraillesi unohtumaton ilta.
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Email -->
+          <a
+            href={`mailto:${email}`}
+            class="group flex flex-col md:flex-row items-center md:items-start gap-4 px-6 py-4 bg-accent/10 hover:bg-accent/20 border border-accent/30 hover:border-accent/50 rounded-xl transition-all duration-300 hover:scale-105"
+          >
+            <svg class="w-6 h-6 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            <div class="text-center md:text-left">
+              <div class="text-xs text-white/60 uppercase tracking-wide mb-1">Sähköposti</div>
+              <div class="text-sm md:text-base font-semibold text-accent group-hover:text-accent/80 transition-colors break-all">
+                {email}
+              </div>
+            </div>
+          </a>
+          
+          <!-- Phone -->
+          <a
+            href={`tel:${phone.replace(/\s/g, '')}`}
+            class="group flex flex-col md:flex-row items-center md:items-start gap-4 px-6 py-4 bg-accent/10 hover:bg-accent/20 border border-accent/30 hover:border-accent/50 rounded-xl transition-all duration-300 hover:scale-105"
+          >
+            <svg class="w-6 h-6 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+            <div class="text-center md:text-left">
+              <div class="text-xs text-white/60 uppercase tracking-wide mb-1">Puhelin</div>
+              <div class="text-sm md:text-base font-semibold text-accent group-hover:text-accent/80 transition-colors">
+                {phone}
+              </div>
+            </div>
+          </a>
+          
+          <!-- Location -->
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-4 px-6 py-4 bg-accent/10 border border-accent/30 rounded-xl">
+            <svg class="w-6 h-6 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <div class="text-center md:text-left">
+              <div class="text-xs text-white/60 uppercase tracking-wide mb-1">Sijainti</div>
+              <div class="text-sm md:text-base font-semibold text-accent">
+                {location}
+              </div>
+            </div>
+          </div>
+
+          <!-- Website -->
+          <a
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col md:flex-row items-center md:items-start gap-4 px-6 py-4 bg-accent/10 hover:bg-accent/20 border border-accent/30 hover:border-accent/50 rounded-xl transition-all duration-300 hover:scale-105"
+            aria-label="Niceevents.fi"
+          >
+            <svg class="w-6 h-6 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 100-18 9 9 0 000 18z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.6 9h16.8"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.6 15h16.8"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c2.5 2.7 4 5.7 4 9s-1.5 6.3-4 9c-2.5-2.7-4-5.7-4-9s1.5-6.3 4-9z"></path>
+            </svg>
+            <div class="text-center md:text-left">
+              <div class="text-xs text-white/60 uppercase tracking-wide mb-1">Verkkosivu</div>
+              <div class="text-sm md:text-base font-semibold text-accent group-hover:text-accent/80 transition-colors break-all">
+                niceevents.fi
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
