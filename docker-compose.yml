@@ -17,7 +17,8 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared_tunnel
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    # NOTE: --no-autoupdate is a top-level cloudflared flag (must come before "tunnel")
+    command: --no-autoupdate tunnel run --token ${TUNNEL_TOKEN}
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     depends_on:

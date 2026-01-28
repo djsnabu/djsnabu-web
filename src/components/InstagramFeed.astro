@@ -1,36 +1,49 @@
 ---
 interface Props {
-  apiUrl?: string;
+  /** Instagram-profiilin URL "Seuraa"-napille */
   instagramUrl?: string;
+  /** Kuinka monta postausta haetaan (max 25 per pyyntö) */
   maxPosts?: number;
 }
 
-interface InstagramPost {
+interface BeholdItem {
   id: string;
-  imageUrl: string;
   caption?: string;
-  likes?: number;
+  media_url?: string;
+  mediaUrl?: string;
+  thumbnail_url?: string;
+  thumbnailUrl?: string;
   permalink?: string;
   timestamp?: string;
+  like_count?: number;
+  mediaType?: string;
+  sizes?: {
+    small?: { mediaUrl?: string | null };
+    medium?: { mediaUrl?: string | null };
+    large?: { mediaUrl?: string | null };
+    full?: { mediaUrl?: string | null };
+  };
 }
 
-const { 
-  apiUrl = '',
+const {
   instagramUrl = 'https://instagram.com/djsnabu',
-  maxPosts = 6
+  maxPosts = 6,
 } = Astro.props;
 
-let posts: InstagramPost[] = [];
-let isLoading = true;
+// Behold / muu JSON-feed: PUBLIC_INSTAGRAM_FEED_URL
+const FEED_URL = import.meta.env.PUBLIC_INSTAGRAM_FEED_URL;
+
+let posts: BeholdItem[] = [];
 let error: string | null = null;
 
-// Fetch Instagram posts from API
-if (apiUrl) {
+if (!FEED_URL) {
+  // Ei rikota sivua jos URL puuttuu
+  error = 'Instagram-feed ei ole vielä kytketty.';
+} else {
   try {
-    const response = await fetch(apiUrl, {
-      headers: {
-        'Accept': 'application/json',
-      },
+    const response = await fetch(FEED_URL, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
     });
 
     if (!response.ok) {
@@ -38,128 +51,143 @@ if (apiUrl) {
     }
 
     const data = await response.json();
-    
-    // Handle different API response formats
-    // Behold.so format: { data: [...] }
-    // Generic format: [...] or { posts: [...] }
-    if (Array.isArray(data)) {
-      posts = data.slice(0, maxPosts);
-    } else if (data.data && Array.isArray(data.data)) {
-      posts = data.data.slice(0, maxPosts);
-    } else if (data.posts && Array.isArray(data.posts)) {
-      posts = data.posts.slice(0, maxPosts);
-    } else {
-      throw new Error('Unexpected API response format');
+    const items: BeholdItem[] = Array.isArray(data)
+      ? data
+      : Array.isArray(data.data)
+      ? data.data
+      : Array.isArray(data.posts)
+      ? data.posts
+      : [];
+
+    posts = items
+      .filter(
+        (item) =>
+          item.media_url ||
+          item.mediaUrl ||
+          item.thumbnail_url ||
+          item.thumbnailUrl ||
+          item.sizes?.small?.mediaUrl ||
+          item.sizes?.medium?.mediaUrl ||
+          item.sizes?.large?.mediaUrl ||
+          item.sizes?.full?.mediaUrl
+      )
+      .sort((a, b) => {
+        const at = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+        const bt = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+        return bt - at;
+      })
+      .slice(0, maxPosts);
+
+    if (!posts.length) {
+      error = 'Ei julkaisuja saatavilla juuri nyt.';
     }
-
-    // Normalize post data
-    posts = posts.map((post: any) => ({
-      id: post.id || post.media_id || Math.random().toString(),
-      imageUrl: post.imageUrl || post.media_url || post.image || post.thumbnail_url || '',
-      caption: post.caption || post.text || '',
-      likes: post.likes || post.like_count || 0,
-      permalink: post.permalink || post.url || instagramUrl,
-      timestamp: post.timestamp || post.timestamp || '',
-    }));
-
-    isLoading = false;
   } catch (err) {
-    error = err instanceof Error ? err.message : 'Failed to load Instagram feed';
-    isLoading = false;
-    console.error('Instagram Feed Error:', err);
+    console.error('Instagram Feed Error (Behold):', err);
+    error = 'Instagram-feed ei ole tällä hetkellä saatavilla.';
   }
-} else {
-  isLoading = false;
-  error = 'API URL not provided';
 }
+
+const hasPosts = !error && posts.length > 0;
 ---
 
-<section id="gallery" class="py-20 px-4">
-  <div class="container mx-auto max-w-7xl">
-    <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
-      <span class="text-accent">Instagram</span>
-    </h2>
-    
-    {isLoading && (
+{hasPosts && (
+  <section id="gallery" class="py-20 px-4">
+    <div class="container mx-auto max-w-7xl">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+        <span class="text-accent">Instagram</span>
+      </h2>
+
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        {Array.from({ length: 6 }).map(() => (
-          <div class="glass-effect rounded-lg overflow-hidden aspect-square animate-pulse">
-            <div class="w-full h-full bg-white/5"></div>
-          </div>
-        ))}
-      </div>
-    )}
+        {posts.map((post) => {
+          const isVideo = post.mediaType === 'VIDEO';
+          const fromSizes =
+            post.sizes?.small?.mediaUrl ||
+            post.sizes?.medium?.mediaUrl ||
+            post.sizes?.large?.mediaUrl ||
+            post.sizes?.full?.mediaUrl ||
+            '';
 
-    {error && !isLoading && (
-      <div class="text-center py-12">
-        <div class="glass-effect rounded-xl p-8 max-w-md mx-auto">
-          <svg class="w-16 h-16 text-accent/50 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <p class="text-white/70 mb-4">{error}</p>
-          <p class="text-sm text-white/50">Instagram-feed ei ole saatavilla tällä hetkellä.</p>
-        </div>
-      </div>
-    )}
+          const image = isVideo
+            ? post.thumbnail_url ||
+              post.thumbnailUrl ||
+              fromSizes ||
+              post.mediaUrl ||
+              post.media_url ||
+              ''
+            : post.media_url ||
+              post.mediaUrl ||
+              post.thumbnail_url ||
+              post.thumbnailUrl ||
+              fromSizes ||
+              '';
 
-    {!isLoading && !error && posts.length > 0 && (
-      <>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          {posts.map((post) => (
+          return (
             <a
               href={post.permalink || instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="glass-effect rounded-lg overflow-hidden aspect-square group cursor-pointer hover:scale-105 transition-all duration-300 relative"
+              class="glass-effect rounded-2xl overflow-hidden aspect-square group relative cursor-pointer hover:scale-[1.02] transition-transform duration-300"
             >
               <img
-                src={post.imageUrl}
-                alt={post.caption || 'Instagram post'}
-                class="w-full h-full object-cover transition-opacity duration-300"
+                src={image}
+                alt={post.caption || 'Instagram post by DJ Snabu'}
+                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
-              
-              {/* Hover overlay with likes and caption */}
-              <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                {post.likes !== undefined && post.likes > 0 && (
-                  <div class="flex items-center gap-2 text-white mb-2">
-                    <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
-                    <span class="font-semibold">{post.likes.toLocaleString()}</span>
-                  </div>
-                )}
+
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                 {post.caption && (
-                  <p class="text-white text-sm line-clamp-3">{post.caption}</p>
+                  <p class="text-sm text-white/90 line-clamp-3 text-left">
+                    {post.caption}
+                  </p>
                 )}
               </div>
             </a>
-          ))}
-        </div>
-        
-        <div class="text-center">
-          <a
-            href={instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-8 py-4 bg-accent/20 hover:bg-accent/30 border border-accent/50 rounded-full text-accent font-semibold transition-all duration-300 hover:scale-105"
-          >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-            Follow on Instagram
-          </a>
-        </div>
-      </>
-    )}
-
-    {!isLoading && !error && posts.length === 0 && (
-      <div class="text-center py-12">
-        <p class="text-white/70">Ei postauksia saatavilla.</p>
+          );
+        })}
       </div>
-    )}
-  </div>
-</section>
+
+      <div class="text-center">
+        <a
+          href={instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-8 py-4 bg-accent/20 hover:bg-accent/30 border border-accent/50 rounded-full text-accent font-semibold tracking-wide uppercase text-xs md:text-sm shadow-[0_0_25px_rgba(0,240,255,0.35)] transition-transform duration-300 hover:scale-105"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
+          </svg>
+          Seuraa @djsnabu
+        </a>
+      </div>
+    </div>
+  </section>
+)}
+
+{!hasPosts && error && (
+  <section id="gallery" class="py-20 px-4">
+    <div class="container mx-auto max-w-7xl">
+      <div class="glass-effect rounded-2xl p-8 md:p-10 text-center max-w-xl mx-auto">
+        <p class="text-white/80 text-lg font-semibold mb-2">Instagram ei ole juuri nyt saatavilla</p>
+        <p class="text-white/60 text-sm">{error}</p>
+        <p class="text-xs text-white/40 mt-4">Tarkista myöhemmin uudelleen tai seuraa suoraan Instagramissa.</p>
+        <a
+          href={instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-accent/15 hover:bg-accent/30 text-accent text-sm font-medium transition-transform duration-300 hover:scale-105"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 10-5.656 5.656 4 4 0 005.656-5.656z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h4a2 2 0 012 2v4" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 10l-6.586 6.586a2 2 0 01-2.828 0L7 13" />
+          </svg>
+          Avaa Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+)}
 
 <style>
   .line-clamp-3 {
@@ -169,3 +197,4 @@ if (apiUrl) {
     overflow: hidden;
   }
 </style>
+
