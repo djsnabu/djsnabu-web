@@ -23,10 +23,32 @@
 4. Lisää **Environment variables** kuten yllä
 5. **Deploy the stack**
 
+## Automaattinen deploy GitHub pushista (suositus)
+
+Tämä repo sisältää workflow:n `.github/workflows/deploy.yml`, joka:
+1. Buildaa Docker-imagen pushista `main`-haaraan
+2. Pushaa imagen GHCR:ään: `ghcr.io/djsnabu/djsnabu-web:latest`
+3. (Valinnainen) kutsuu Portainer webhookia, joka redeployaa stackin
+
+### Portainer webhook käyttöön
+1. Portainer → Stacks → valitse stack → **Webhook**
+2. Ota webhook käyttöön ja kopioi URL
+3. GitHub repo → Settings → Secrets and variables → Actions → New secret
+   - Name: `PORTAINER_WEBHOOK_URL`
+   - Value: (Portainer webhook URL)
+4. Varmista että stack käyttää imagea:
+   - `ghcr.io/djsnabu/djsnabu-web:latest`
+5. Varmista että Portainer pystyy pullaamaan GHCR-imagen:
+   - joko tee package publiciksi GHCR:ssä
+   - tai lisää Portaineriin registry credentials (GitHub user + PAT read:packages)
+
+Nyt jokainen push `main`-haaraan päivittää liven automaattisesti.
+
 ## Tarkistus / debug
+- GitHub → Actions: workflow `Build and deploy djsnabu-web`
 - Portainer → Stack → **Logs**
   - `tunnel`: pitäisi näkyä “Connected / Registered tunnel”
-  - `astro-site`: build + serve
+  - `astro-site`: image pull + container restart
 
 Jos domain ei aukea:
 1. Cloudflare Zero Trust → Tunnel → varmista että hostnamet osoittavat serviceen `http://astro-site:3000`

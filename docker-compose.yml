@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   astro-site:
-    # Vaihtoehto 1: Käytä valmista imagea (buildaa ensin: docker build -t djsnabu-web .)
-    image: djsnabu-web:latest
+    # Automaattinen deploy: image buildataan GitHub Actionsissa ja julkaistaan GHCR:ään
+    image: ghcr.io/djsnabu/djsnabu-web:latest
     container_name: djsnabu_web
     restart: unless-stopped
     networks:
