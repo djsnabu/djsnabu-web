@@ -46,7 +46,13 @@ jobs:
   trigger-portainer:
     needs: docker
     runs-on: ubuntu-latest
-    if: ${{ secrets.PORTAINER_WEBHOOK_URL != '' }}
     steps:
-      - name: Trigger Portainer redeploy webhook
-        run: curl -fsSL -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+      - name: Trigger Portainer redeploy webhook (optional)
+        env:
+          PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+        run: |
+          if [ -z "$PORTAINER_WEBHOOK_URL" ]; then
+            echo "PORTAINER_WEBHOOK_URL not set, skipping redeploy trigger"
+            exit 0
+          fi
+          curl -fsSL -X POST "$PORTAINER_WEBHOOK_URL"
