@@ -23,12 +23,31 @@ const jsonLd = {
   url: 'https://djsnabu.com',
   telephone: '+358401950045',
   email: 'info@niceevents.fi',
+  priceRange: '€€',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Helsinki',
+    addressRegion: 'Uusimaa',
     addressCountry: 'FI',
   },
-  areaServed: 'Finland',
+  areaServed: [
+    {
+      '@type': 'City',
+      name: 'Helsinki'
+    },
+    {
+      '@type': 'City',
+      name: 'Espoo'
+    },
+    {
+      '@type': 'City',
+      name: 'Vantaa'
+    },
+    {
+      '@type': 'Country',
+      name: 'Finland'
+    }
+  ],
   sameAs: [
     'https://instagram.com/djsnabu',
     'https://soundcloud.com/djsnabu',
