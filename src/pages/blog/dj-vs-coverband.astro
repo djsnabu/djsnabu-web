@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StickyHeader from '../../components/StickyHeader.astro';
+
+const title = 'DJ vai coverbändi häissä ja yrityksen juhlissa? | DJ SNABU Blogi';
+const description = 'Kumpi sopii paremmin häihin tai yritysjuhliin – DJ vai coverbändi? Vertailemme molemmat ja kerromme miksi paras ratkaisu voi olla yhdistelmä.';
+---
+
+<Layout title={title} description={description}>
+  <StickyHeader />
+
+  <main class="pt-28 pb-20 px-4">
+    <article class="max-w-3xl mx-auto">
+
+      <div class="mb-10">
+        <a href="/blog" class="text-accent/80 hover:text-accent text-sm uppercase tracking-widest transition-colors">← Takaisin blogiin</a>
+      </div>
+
+      <header class="mb-12">
+        <p class="text-xs tracking-[0.3em] uppercase text-accent/80 mb-4">Tapahtumajärjestäjälle</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
+          DJ vai coverbändi häissä ja yrityksen juhlissa?
+        </h1>
+        <p class="text-white/60 text-lg leading-relaxed">
+          Se on kysymys, jota moni tapahtumajärjestäjä pohtii budjettia ja ohjelmaa suunnitellessaan. Molemmilla on omat vahvuutensa — ja oikea valinta riippuu pitkälti siitä, millaista tunnelmaa tavoittelet.
+        </p>
+      </header>
+
+      <div class="prose prose-invert prose-lg max-w-none
+        prose-headings:text-white prose-headings:font-bold
+        prose-p:text-white/75 prose-p:leading-relaxed
+        prose-strong:text-white
+        prose-a:text-accent prose-a:no-underline hover:prose-a:underline
+        prose-li:text-white/75
+        prose-th:text-white prose-td:text-white/75
+        prose-hr:border-white/10">
+
+        <h2>DJ — monipuolisuus ja joustava musiikki</h2>
+        <p>
+          DJ:n suurin etu on valtava musiikkivalikoima. Häistä yritysjuhliin DJ pystyy soittamaan käytännössä mitä tahansa — 80-luvun klassikoista tämän hetken hiteistä latinorytmeihin. Musiikki voidaan räätälöidä tunnelman ja yleisön mukaan reaaliajassa: jos tanssilattia hiljenee, biisi vaihtuu heti.
+        </p>
+        <p>
+          DJ on myös logistisesti yksinkertaisempi vaihtoehto. Tilaan riittää pienempi tila, äänentoisto on kompakti, ja hinta on tyypillisesti selvästi edullisempi kuin kokoonpano, jossa on useita muusikoita.
+        </p>
+
+        <h2>Coverbändi — elävä musiikki ja show</h2>
+        <p>
+          Coverbändi tuo mukanaan jotain, mitä äänitteiltä ei saa: elävän esityksen energian. Kun bändi soittaa tutun kappaleen livenä, siinä on aitous ja läsnäolo, joka koskettaa eri tavalla. Vieraat seuraavat esiintymistä, taputtavat tahtia ja tunnelma nousee.
+        </p>
+        <p>
+          Bändi sopii erityisesti tilanteisiin, joissa itse esitys on osa ohjelmaa — esimerkiksi illallisjuhlaan, jossa musiikki on taustaviihteen sijaan pääosassa.
+        </p>
+
+        <h2>Kumpi sopii mihinkin?</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>DJ</th>
+              <th>Coverbändi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Budjetti</td>
+              <td>Edullisempi</td>
+              <td>Kalliimpi</td>
+            </tr>
+            <tr>
+              <td>Musiikkivalikoima</td>
+              <td>Rajaton</td>
+              <td>Rajattu ohjelmistoon</td>
+            </tr>
+            <tr>
+              <td>Tanssi-ilta</td>
+              <td>Erinomainen</td>
+              <td>Hyvä</td>
+            </tr>
+            <tr>
+              <td>Show &amp; esitys</td>
+              <td>Hyvä</td>
+              <td>Erinomainen</td>
+            </tr>
+            <tr>
+              <td>Tila &amp; logistiikka</td>
+              <td>Helppo</td>
+              <td>Vaatii enemmän tilaa</td>
+            </tr>
+            <tr>
+              <td>Tunnelma</td>
+              <td>Moderni, energinen</td>
+              <td>Lämmin, intiimi</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Paras ratkaisu? Molemmat.</h2>
+        <p>
+          Jos budjetti sen sallii, ei tarvitse valita. Monissa onnistuneimmissa häissä ja yritystilaisuuksissa yhdistetään molemmat: coverbändi luo tunnelman alkuillasta live-esityksillä, jonka jälkeen DJ ottaa ohjat ja pitää tanssilattian täynnä myöhäiseen yöhön.
+        </p>
+        <p>
+          Tämä yhdistelmä tarjoaa sekä elävän musiikin ainutlaatuisuuden että DJ:n rajoittamattoman musiikkivalikoiman — ja vieraat saavat parhaan molemmista maailmoista.
+        </p>
+
+        <hr />
+
+        <p>
+          Tarvitsetko DJ:n, coverbändin tai molemmat tapahtumallesi? <a href="https://niceevents.fi" target="_blank" rel="noopener noreferrer">Niceevents.fi</a> on tapahtumapalvelu, josta löydät DJ:t, coverbändit ja paljon muuta — ammattilaiset yhdestä paikasta helposti.
+        </p>
+
+      </div>
+
+      <div class="mt-16 pt-10 border-t border-white/10 text-center">
+        <a href="/#contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent text-slate-900 font-semibold uppercase tracking-wide hover:scale-105 transition shadow-lg shadow-accent/20">
+          Pyydä tarjous
+        </a>
+      </div>
+
+    </article>
+  </main>
+</Layout>

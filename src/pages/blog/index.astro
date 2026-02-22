@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StickyHeader from '../../components/StickyHeader.astro';
+---
+
+<Layout
+  title="Blogi | DJ SNABU"
+  description="DJ SNABU:n blogi – vinkkejä, kokemuksia ja neuvoja tapahtumajärjestäjille."
+>
+  <StickyHeader />
+
+  <main class="pt-28 pb-20 px-4">
+    <div class="container mx-auto max-w-5xl">
+
+      <div class="mb-16">
+        <p class="text-xs tracking-[0.3em] uppercase text-white/60 mb-3">Blogi</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-white">Artikkelit</h1>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2">
+
+        <a href="/blog/dj-vs-coverband" class="glass-effect border border-white/10 rounded-2xl p-8 hover:border-accent/70 hover:-translate-y-1 transition-all duration-300 group flex flex-col">
+          <p class="text-xs tracking-[0.2em] uppercase text-accent/80 mb-3">Tapahtumajärjestäjälle</p>
+          <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-accent transition-colors">
+            DJ vai coverbändi häissä ja yrityksen juhlissa?
+          </h2>
+          <p class="text-white/60 text-sm leading-relaxed flex-1">
+            Vertailemme DJ:n ja coverbändin vahvuudet — ja kerromme miksi paras ratkaisu voi olla yhdistelmä molemmista.
+          </p>
+          <span class="mt-6 text-accent text-sm font-medium">Lue artikkeli →</span>
+        </a>
+
+      </div>
+    </div>
+  </main>
+</Layout>

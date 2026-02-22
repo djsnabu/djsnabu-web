@@ -4,20 +4,67 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
 }
 
-const { title, description = 'DJ SNABU - Professional DJ Services' } = Astro.props;
+const {
+  title,
+  description = 'DJ SNABU – Ammattitaitoinen DJ häihin, yritystilaisuuksiin ja klubeihin. Helsinki ja koko Suomi.',
+  ogImage = '/djsnabu_promo.jpg',
+  canonicalURL = Astro.url.href,
+} = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'DJ SNABU',
+  description: description,
+  url: 'https://djsnabu.com',
+  telephone: '+358401950045',
+  email: 'info@niceevents.fi',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Helsinki',
+    addressCountry: 'FI',
+  },
+  areaServed: 'Finland',
+  sameAs: [
+    'https://instagram.com/djsnabu',
+    'https://soundcloud.com/djsnabu',
+  ],
+};
 ---
 
 <!doctype html>
 <html lang="fi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`https://djsnabu.com${ogImage}`} />
+    <meta property="og:locale" content="fi_FI" />
+    <meta property="og:site_name" content="DJ SNABU" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`https://djsnabu.com${ogImage}`} />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body class="bg-[#0a0a0a] text-white min-h-screen">
     <slot />
