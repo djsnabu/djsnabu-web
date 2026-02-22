@@ -1,53 +1,12 @@
 ---
 const events = [
   {
-    dateLabel: 'Pe 27.2.2026',
-    title: 'DJ-keikka Freetime Jyväskylä',
-    location: 'Freetime, Jyväskylä',
-    time: '22:00–23:00',
-    fee: '300 €',
-    notes: 'Cool & classic club-setti – räätälöidään illan fiiliksen mukaan.'
-  },
-  {
-    dateLabel: 'Pe 27.2.2026',
-    title: 'Hollaback @ Jyväskylä',
+    dateLabel: 'La 7.3.2026',
+    title: 'Hollaback! @ Freetime',
     location: 'Jyväskylä',
-    time: '22:00–23:00',
-    fee: '300 €',
-    notes: '2000-luvun R&B + hiphop -bileet, paljon nostalgiaa ja tanssia.'
+    time: '23:00 - 04:00',
+    notes: 'Suomen kovimmat R&B ja Hip Hop -bileet.'
   },
-  {
-    dateLabel: 'Pe 13.3.2026',
-    title: 'DJ @ Jolly Joker (iltapäivä setti)',
-    location: 'Jolly Joker, Tampere',
-    time: '22:00–23:00',
-    fee: '300 €',
-    notes: 'Energiaa nostava startti illalle – ideaalinen yritys- ja VIP-tilaisuuksiin.'
-  },
-  {
-    dateLabel: 'Pe 13.3.2026',
-    title: 'Mouhous @ Jolly Joker',
-    location: 'Jolly Joker, Tampere',
-    time: '22:00–23:00',
-    fee: '300 €',
-    notes: 'Juontaminen + DJ-setti, Mouhous-lämppäri – vauhdikas yhdistelmä.'
-  },
-  {
-    dateLabel: 'Pe 20.3.2026',
-    title: 'DJ @ Kansanpubi',
-    location: 'Kansanpubi, Tampere',
-    time: '22:00–23:00',
-    fee: '400 €',
-    notes: 'Koko illan bilevastuu – soittolista rakennettu pubiyleisölle.'
-  },
-  {
-    dateLabel: 'La 21.3.2026',
-    title: 'DJ @ Kansanpubi',
-    location: 'Kansanpubi, Tampere',
-    time: '22:00–23:00',
-    fee: '400 €',
-    notes: 'Tapahtuman kakkosilta – fokus hitikkäässä tanssimusiikissa.'
-  }
 ];
 ---
 
@@ -63,25 +22,29 @@ const events = [
       </p>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-2">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {events.map((event) => (
-        <article class="glass-effect border border-white/10 rounded-2xl p-6 hover:border-accent/70 hover:-translate-y-1 transition-all duration-300">
-          <p class="text-sm uppercase tracking-wide text-accent/90">{event.dateLabel}</p>
-          <h3 class="text-2xl font-semibold text-white mt-2">{event.title}</h3>
-          <p class="text-white/70 text-sm mb-4">{event.location}</p>
-          <dl class="grid grid-cols-2 gap-y-2 text-white/80 text-sm">
-            <dt class="text-white/50">Aika</dt>
-            <dd class="font-medium">{event.time}</dd>
-            <dt class="text-white/50">Palkkio</dt>
-            <dd class="font-medium">{event.fee}</dd>
-          </dl>
-          <p class="text-white/70 text-sm mt-4">{event.notes}</p>
+        <article class="glass-effect border border-white/10 rounded-2xl p-6 hover:border-accent/70 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+          <p class="text-sm uppercase tracking-wide text-accent/90 mb-2">{event.dateLabel}</p>
+          <h3 class="text-xl font-bold text-white mb-1">{event.title}</h3>
+          <p class="text-white/60 text-sm mb-4 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            {event.location}
+          </p>
+          
+          <div class="mt-auto pt-4 border-t border-white/5">
+             <div class="flex justify-between text-sm text-white/80 mb-2">
+                <span class="text-white/50">Aika</span>
+                <span>{event.time}</span>
+             </div>
+             <p class="text-xs text-white/50">{event.notes}</p>
+          </div>
         </article>
       ))}
     </div>
 
-    <div class="mt-10 text-center">
-      <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent text-slate-900 font-semibold uppercase tracking-wide hover:scale-105 transition">
+    <div class="mt-12 text-center">
+      <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent text-slate-900 font-semibold uppercase tracking-wide hover:scale-105 transition shadow-lg shadow-accent/20">
         Pyydä tarjous & varaa oma ilta
       </a>
     </div>
