@@ -1,0 +1,89 @@
+---
+const events = [
+  {
+    dateLabel: 'Pe 27.2.2026',
+    title: 'DJ-keikka Freetime Jyväskylä',
+    location: 'Freetime, Jyväskylä',
+    time: '22:00–23:00',
+    fee: '300 €',
+    notes: 'Cool & classic club-setti – räätälöidään illan fiiliksen mukaan.'
+  },
+  {
+    dateLabel: 'Pe 27.2.2026',
+    title: 'Hollaback @ Jyväskylä',
+    location: 'Jyväskylä',
+    time: '22:00–23:00',
+    fee: '300 €',
+    notes: '2000-luvun R&B + hiphop -bileet, paljon nostalgiaa ja tanssia.'
+  },
+  {
+    dateLabel: 'Pe 13.3.2026',
+    title: 'DJ @ Jolly Joker (iltapäivä setti)',
+    location: 'Jolly Joker, Tampere',
+    time: '22:00–23:00',
+    fee: '300 €',
+    notes: 'Energiaa nostava startti illalle – ideaalinen yritys- ja VIP-tilaisuuksiin.'
+  },
+  {
+    dateLabel: 'Pe 13.3.2026',
+    title: 'Mouhous @ Jolly Joker',
+    location: 'Jolly Joker, Tampere',
+    time: '22:00–23:00',
+    fee: '300 €',
+    notes: 'Juontaminen + DJ-setti, Mouhous-lämppäri – vauhdikas yhdistelmä.'
+  },
+  {
+    dateLabel: 'Pe 20.3.2026',
+    title: 'DJ @ Kansanpubi',
+    location: 'Kansanpubi, Tampere',
+    time: '22:00–23:00',
+    fee: '400 €',
+    notes: 'Koko illan bilevastuu – soittolista rakennettu pubiyleisölle.'
+  },
+  {
+    dateLabel: 'La 21.3.2026',
+    title: 'DJ @ Kansanpubi',
+    location: 'Kansanpubi, Tampere',
+    time: '22:00–23:00',
+    fee: '400 €',
+    notes: 'Tapahtuman kakkosilta – fokus hitikkäässä tanssimusiikissa.'
+  }
+];
+---
+
+<section id="keikat" class="py-20 px-4 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+  <div class="container mx-auto max-w-5xl">
+    <div class="flex flex-col md:flex-row md:items-end gap-6 mb-12">
+      <div>
+        <p class="text-xs tracking-[0.3em] uppercase text-white/60 mb-3">Kalenteri</p>
+        <h2 class="text-4xl md:text-5xl font-bold text-white">Tulevat keikat</h2>
+      </div>
+      <p class="text-white/70 md:text-right md:ml-auto">
+        Päivitetty 22.2.2026 · vapaita viikonloppuja keväälle kysymällä
+      </p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      {events.map((event) => (
+        <article class="glass-effect border border-white/10 rounded-2xl p-6 hover:border-accent/70 hover:-translate-y-1 transition-all duration-300">
+          <p class="text-sm uppercase tracking-wide text-accent/90">{event.dateLabel}</p>
+          <h3 class="text-2xl font-semibold text-white mt-2">{event.title}</h3>
+          <p class="text-white/70 text-sm mb-4">{event.location}</p>
+          <dl class="grid grid-cols-2 gap-y-2 text-white/80 text-sm">
+            <dt class="text-white/50">Aika</dt>
+            <dd class="font-medium">{event.time}</dd>
+            <dt class="text-white/50">Palkkio</dt>
+            <dd class="font-medium">{event.fee}</dd>
+          </dl>
+          <p class="text-white/70 text-sm mt-4">{event.notes}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-10 text-center">
+      <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent text-slate-900 font-semibold uppercase tracking-wide hover:scale-105 transition">
+        Pyydä tarjous & varaa oma ilta
+      </a>
+    </div>
+  </div>
+</section>
