@@ -4,6 +4,7 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://djsnabu.com',
+  trailingSlash: 'always',
   server: {
     port: 4321,
     host: true,
