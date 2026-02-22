@@ -9,11 +9,12 @@
           DJ SNABU
         </a>
         <div class="hidden md:flex items-center gap-6">
-          <a href="/blog" class="text-white/80 hover:text-accent transition-colors">Blogi</a>
-          <a href="#services" class="text-white/80 hover:text-accent transition-colors">Palvelut</a>
-          <a href="#music" class="text-white/80 hover:text-accent transition-colors">Musiikki</a>
-          <a href="#gallery" class="text-white/80 hover:text-accent transition-colors">Galleria</a>
-          <a href="#contact" class="text-white/80 hover:text-accent transition-colors">Yhteystiedot</a>
+          <a href="/blog/" class="text-white/80 hover:text-accent transition-colors">Blogi</a>
+          <a href="/#services" class="text-white/80 hover:text-accent transition-colors">Palvelut</a>
+          <a href="/#music" class="text-white/80 hover:text-accent transition-colors">Musiikki</a>
+          <a href="/#videos" class="text-white/80 hover:text-accent transition-colors">Videot</a>
+          <a href="/#gallery" class="text-white/80 hover:text-accent transition-colors">Galleria</a>
+          <a href="/#contact" class="text-white/80 hover:text-accent transition-colors">Yhteystiedot</a>
         </div>
         <button class="md:hidden text-white" id="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
           <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,11 +31,12 @@
   <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden bg-black/90 backdrop-blur-md border-b border-white/10">
     <div class="container mx-auto px-4 py-4 flex flex-col gap-4">
-      <a href="/blog" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Blogi</a>
-      <a href="#services" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Palvelut</a>
-      <a href="#music" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Musiikki</a>
-      <a href="#gallery" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Galleria</a>
-      <a href="#contact" class="text-white/80 hover:text-accent transition-colors py-2">Yhteystiedot</a>
+      <a href="/blog/" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Blogi</a>
+      <a href="/#services" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Palvelut</a>
+      <a href="/#music" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Musiikki</a>
+      <a href="/#videos" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Videot</a>
+      <a href="/#gallery" class="text-white/80 hover:text-accent transition-colors py-2 border-b border-white/10">Galleria</a>
+      <a href="/#contact" class="text-white/80 hover:text-accent transition-colors py-2">Yhteystiedot</a>
     </div>
   </div>
 </header>
@@ -61,5 +63,15 @@
       iconClose?.classList.add('hidden');
       menuBtn?.setAttribute('aria-expanded', 'false');
     });
+  });
+
+  // Header background change on scroll
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      header?.querySelector('nav')?.classList.add('bg-black/80');
+    } else {
+      header?.querySelector('nav')?.classList.remove('bg-black/80');
+    }
   });
 </script>
