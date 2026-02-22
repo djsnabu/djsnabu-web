@@ -1,28 +1,7 @@
 ---
 interface Props {
-  /** Instagram-profiilin URL "Seuraa"-napille */
   instagramUrl?: string;
-  /** Kuinka monta postausta haetaan (max 25 per pyyntö) */
   maxPosts?: number;
-}
-
-interface BeholdItem {
-  id: string;
-  caption?: string;
-  media_url?: string;
-  mediaUrl?: string;
-  thumbnail_url?: string;
-  thumbnailUrl?: string;
-  permalink?: string;
-  timestamp?: string;
-  like_count?: number;
-  mediaType?: string;
-  sizes?: {
-    small?: { mediaUrl?: string | null };
-    medium?: { mediaUrl?: string | null };
-    large?: { mediaUrl?: string | null };
-    full?: { mediaUrl?: string | null };
-  };
 }
 
 const {
@@ -30,164 +9,42 @@ const {
   maxPosts = 6,
 } = Astro.props;
 
-// Behold / muu JSON-feed: PUBLIC_INSTAGRAM_FEED_URL
 const FEED_URL = import.meta.env.PUBLIC_INSTAGRAM_FEED_URL;
-
-let posts: BeholdItem[] = [];
-let error: string | null = null;
-
-if (!FEED_URL) {
-  // Ei rikota sivua jos URL puuttuu
-  error = 'Instagram-feed ei ole vielä kytketty.';
-} else {
-  try {
-    const response = await fetch(FEED_URL, {
-      method: 'GET',
-      headers: { Accept: 'application/json' },
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    const items: BeholdItem[] = Array.isArray(data)
-      ? data
-      : Array.isArray(data.data)
-      ? data.data
-      : Array.isArray(data.posts)
-      ? data.posts
-      : [];
-
-    posts = items
-      .filter(
-        (item) =>
-          item.media_url ||
-          item.mediaUrl ||
-          item.thumbnail_url ||
-          item.thumbnailUrl ||
-          item.sizes?.small?.mediaUrl ||
-          item.sizes?.medium?.mediaUrl ||
-          item.sizes?.large?.mediaUrl ||
-          item.sizes?.full?.mediaUrl
-      )
-      .sort((a, b) => {
-        const at = a.timestamp ? new Date(a.timestamp).getTime() : 0;
-        const bt = b.timestamp ? new Date(b.timestamp).getTime() : 0;
-        return bt - at;
-      })
-      .slice(0, maxPosts);
-
-    if (!posts.length) {
-      error = 'Ei julkaisuja saatavilla juuri nyt.';
-    }
-  } catch (err) {
-    console.error('Instagram Feed Error (Behold):', err);
-    error = 'Instagram-feed ei ole tällä hetkellä saatavilla.';
-  }
-}
-
-const hasPosts = !error && posts.length > 0;
 ---
 
-{hasPosts && (
-  <section id="gallery" class="py-20 px-4">
-    <div class="container mx-auto max-w-7xl">
-      <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
-        <span class="text-accent">Instagram</span>
-      </h2>
+<section id="gallery" class="py-20 px-4">
+  <div class="container mx-auto max-w-7xl">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+      <span class="text-accent">Instagram</span>
+    </h2>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        {posts.map((post) => {
-          const isVideo = post.mediaType === 'VIDEO';
-          const fromSizes =
-            post.sizes?.small?.mediaUrl ||
-            post.sizes?.medium?.mediaUrl ||
-            post.sizes?.large?.mediaUrl ||
-            post.sizes?.full?.mediaUrl ||
-            '';
-
-          const image = isVideo
-            ? post.thumbnail_url ||
-              post.thumbnailUrl ||
-              fromSizes ||
-              post.mediaUrl ||
-              post.media_url ||
-              ''
-            : post.media_url ||
-              post.mediaUrl ||
-              post.thumbnail_url ||
-              post.thumbnailUrl ||
-              fromSizes ||
-              '';
-
-          return (
-            <a
-              href={post.permalink || instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="glass-effect rounded-2xl overflow-hidden aspect-square group relative cursor-pointer hover:scale-[1.02] transition-transform duration-300"
-            >
-              <img
-                src={image}
-                alt={post.caption || 'Instagram post by DJ Snabu'}
-                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                {post.caption && (
-                  <p class="text-sm text-white/90 line-clamp-3 text-left">
-                    {post.caption}
-                  </p>
-                )}
-              </div>
-            </a>
-          );
-        })}
-      </div>
-
-      <div class="text-center">
-        <a
-          href={instagramUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-8 py-4 bg-accent/20 hover:bg-accent/30 border border-accent/50 rounded-full text-accent font-semibold tracking-wide uppercase text-xs md:text-sm shadow-[0_0_25px_rgba(0,240,255,0.35)] transition-transform duration-300 hover:scale-105"
-        >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
-          </svg>
-          Seuraa @djsnabu
-        </a>
-      </div>
+    <div id="ig-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+      <!-- Ladataan... -->
+      {Array.from({ length: maxPosts }).map(() => (
+        <div class="glass-effect rounded-2xl aspect-square animate-pulse bg-white/5"></div>
+      ))}
     </div>
-  </section>
-)}
 
-{!hasPosts && error && (
-  <section id="gallery" class="py-20 px-4">
-    <div class="container mx-auto max-w-7xl">
-      <div class="glass-effect rounded-2xl p-8 md:p-10 text-center max-w-xl mx-auto">
-        <p class="text-white/80 text-lg font-semibold mb-2">Instagram ei ole juuri nyt saatavilla</p>
-        <p class="text-white/60 text-sm">{error}</p>
-        <p class="text-xs text-white/40 mt-4">Tarkista myöhemmin uudelleen tai seuraa suoraan Instagramissa.</p>
-        <a
-          href={instagramUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-6 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-accent/15 hover:bg-accent/30 text-accent text-sm font-medium transition-transform duration-300 hover:scale-105"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 10-5.656 5.656 4 4 0 005.656-5.656z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h4a2 2 0 012 2v4" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 10l-6.586 6.586a2 2 0 01-2.828 0L7 13" />
-          </svg>
-          Avaa Instagram
-        </a>
-      </div>
+    <div id="ig-error" class="hidden glass-effect rounded-2xl p-8 text-center max-w-xl mx-auto mb-8">
+      <p class="text-white/80 text-lg font-semibold mb-2">Instagram ei ole juuri nyt saatavilla</p>
+      <p class="text-xs text-white/40 mt-4">Tarkista myöhemmin uudelleen tai seuraa suoraan Instagramissa.</p>
     </div>
-  </section>
-)}
+
+    <div class="text-center">
+      <a
+        href={instagramUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-8 py-4 bg-accent/20 hover:bg-accent/30 border border-accent/50 rounded-full text-accent font-semibold tracking-wide uppercase text-xs md:text-sm shadow-[0_0_25px_rgba(0,240,255,0.35)] transition-transform duration-300 hover:scale-105"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
+        </svg>
+        Seuraa @djsnabu
+      </a>
+    </div>
+  </div>
+</section>
 
 <style>
   .line-clamp-3 {
@@ -198,3 +55,89 @@ const hasPosts = !error && posts.length > 0;
   }
 </style>
 
+<script define:vars={{ FEED_URL, instagramUrl, maxPosts }}>
+  async function loadFeed() {
+    const grid = document.getElementById('ig-grid');
+    const errorBox = document.getElementById('ig-error');
+
+    if (!FEED_URL) {
+      grid.innerHTML = '';
+      errorBox.classList.remove('hidden');
+      return;
+    }
+
+    try {
+      const res = await fetch(FEED_URL);
+      if (!res.ok) throw new Error(`${res.status}`);
+      const data = await res.json();
+
+      const items = Array.isArray(data)
+        ? data
+        : Array.isArray(data.data)
+        ? data.data
+        : Array.isArray(data.posts)
+        ? data.posts
+        : [];
+
+      const posts = items
+        .filter((p) => {
+          const url =
+            p.media_url || p.mediaUrl ||
+            p.thumbnail_url || p.thumbnailUrl ||
+            p.sizes?.large?.mediaUrl || p.sizes?.medium?.mediaUrl ||
+            p.sizes?.small?.mediaUrl || p.sizes?.full?.mediaUrl;
+          return !!url;
+        })
+        .sort((a, b) => {
+          const at = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+          const bt = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+          return bt - at;
+        })
+        .slice(0, maxPosts);
+
+      if (!posts.length) {
+        grid.innerHTML = '';
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      grid.innerHTML = posts.map((post) => {
+        const isVideo = post.mediaType === 'VIDEO';
+        const fromSizes =
+          post.sizes?.large?.mediaUrl ||
+          post.sizes?.medium?.mediaUrl ||
+          post.sizes?.small?.mediaUrl ||
+          post.sizes?.full?.mediaUrl || '';
+
+        const image = isVideo
+          ? post.thumbnail_url || post.thumbnailUrl || fromSizes || post.mediaUrl || post.media_url || ''
+          : post.media_url || post.mediaUrl || post.thumbnail_url || post.thumbnailUrl || fromSizes || '';
+
+        const href = post.permalink || instagramUrl;
+        const caption = post.caption || '';
+
+        return `
+          <a href="${href}" target="_blank" rel="noopener noreferrer"
+            class="glass-effect rounded-2xl overflow-hidden aspect-square group relative cursor-pointer hover:scale-[1.02] transition-transform duration-300">
+            <img
+              src="${image}"
+              alt="${caption.replace(/"/g, '&quot;').slice(0, 100)}"
+              class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            ${caption ? `
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+              <p class="text-sm text-white/90 line-clamp-3 text-left">${caption.replace(/</g, '&lt;').replace(/>/g, '&gt;').slice(0, 200)}</p>
+            </div>` : ''}
+          </a>`;
+      }).join('');
+
+    } catch (err) {
+      console.error('Instagram feed error:', err);
+      grid.innerHTML = '';
+      errorBox.classList.remove('hidden');
+    }
+  }
+
+  loadFeed();
+</script>
